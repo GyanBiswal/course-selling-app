@@ -1,6 +1,6 @@
-const {Router} = require("express");
+import { Router } from "express";
 
-const userRouter = Router;
+const userRouter = Router();
 
 userRouter.post('/signup', function(req,res){
     res.json({
@@ -18,6 +18,4 @@ userRouter.get('/purchases', function(req,res){
     })
 })
 
-modules.export = {
-    userRouter : userRouter
-}
+export { userRouter };

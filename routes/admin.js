@@ -65,15 +65,47 @@ adminRouter.post('/course', adminMiddleware, async function (req, res) {
         courseId: course._id
     })
 })
-adminRouter.put('/course', function (req, res) {
+adminRouter.put('/course', adminMiddleware, async function (req, res) {
+    const adminId = req.userId;
+
+    const {title, description, imageUrl, price, courseId} = req.body;
+
+    const courses = await courseModel.update({
+            // just to make sure two diiferent admins can only update their respective courses
+            // adminA cannot change adminB courses and vice versa.
+            _id: courseId,
+            creatorId: adminId
+        },
+        {
+            title: title,
+            description: description,
+            imageUrl: imageUrl, 
+            price: price,
+        }
+    )
+
     res.json({
-        message: "sign in endpoint"
+        message: "Course updated successfully", 
+        courseId: courses._id
     })
 })
-adminRouter.get('/course/bulk', function (req, res) {
-    res.json({
-        message: "sign in endpoint admin"
-    })
+adminRouter.get('/course/bulk', adminMiddleware, async function (req, res) {
+    const adminId = req.userId;
+    const courses = await courseModel.find({
+        creatorId: adminId
+    },
+    {
+        title: title,
+        description: description,
+        imageUrl: imageUrl, 
+        price: price,
+    }
+)
+
+res.json({
+    message: "Courses in bulk", 
+    courses
+})
 })
 
 

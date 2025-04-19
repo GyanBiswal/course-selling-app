@@ -67,46 +67,40 @@ adminRouter.post('/course', adminMiddleware, async function (req, res) {
 })
 adminRouter.put('/course', adminMiddleware, async function (req, res) {
     const adminId = req.userId;
+    const { title, description, imageUrl, price, courseId } = req.body;
 
-    const {title, description, imageUrl, price, courseId} = req.body;
+    const updatedCourse = await courseModel.findOneAndUpdate(
+        { _id: courseId, creatorId: adminId }, // proper filter
+        { title, description, imageUrl, price },
+        { new: true }
+    );
 
-    const courses = await courseModel.update({
-            // just to make sure two diiferent admins can only update their respective courses
-            // adminA cannot change adminB courses and vice versa.
-            _id: courseId,
-            creatorId: adminId
-        },
-        {
-            title: title,
-            description: description,
-            imageUrl: imageUrl, 
-            price: price,
-        }
-    )
+    if (!updatedCourse) {
+        return res.status(403).json({ error: "You are not authorized to update this course or course not found." });
+    }
 
     res.json({
-        message: "Course updated successfully", 
-        courseId: courses._id
-    })
-})
+        message: "Course updated successfully",
+        courseId: updatedCourse._id
+    });
+});
+
 adminRouter.get('/course/bulk', adminMiddleware, async function (req, res) {
     const adminId = req.userId;
-    const courses = await courseModel.find({
-        creatorId: adminId
-    },
-    {
-        title: title,
-        description: description,
-        imageUrl: imageUrl, 
-        price: price,
-    }
-)
+    const courses = await courseModel.find(
+        { creatorId: adminId },
+        // { title: 1, description: 1, imageUrl: 1, price: 1 } // projection: only include these fields
+    );
 
-res.json({
-    message: "Courses in bulk", 
-    courses
-})
+    res.json({
+        message: "Courses in bulk", 
+        courses
+    })
 })
 
 
 export { adminRouter };
+
+
+// gaurav : 68039e6fab310c1a7b8507b0
+// dhruv :  

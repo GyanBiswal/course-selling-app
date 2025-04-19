@@ -3,7 +3,7 @@ import { JWT_ADMIN_PASSWORD } from "../config.js";
 
 function adminMiddleware(req, res, next){
     const token = req.headers.token;
-    const decoded = jwt.verify(token, JWT_ADMIN_PASSWORD);
+    const decoded = jwt.verify(token, process.env.JWT_ADMIN_PASSWORD);
 
     if(decoded){
         req.userId = decoded.userId;

@@ -35,7 +35,7 @@ adminRouter.post('/signin', async function (req, res) {
     if (admin) {
         const token = jwt.sign({
             id: admin._id,
-        }, JWT_ADMIN_PASSWORD);
+        }, process.env.JWT_ADMIN_PASSWORD);
 
         res.json({
             token: token
@@ -61,7 +61,7 @@ adminRouter.post('/course', adminMiddleware, async function (req, res) {
     })
 
     res.json({
-        message: "Course created successfully",
+        message: "Course created successfully", 
         courseId: course._id
     })
 })

@@ -1,9 +1,9 @@
 import jwt from "jsonwebtoken";
-import { JWT_USER_PASSWORD } from "../config,js";
+import { JWT_USER_PASSWORD } from "../config.js";
 
 function userMiddleware(req, res, next){
     const token = req.headers.token;
-    const decoded = jwt.verify(token, JWT_USER_PASSWORD);
+    const decoded = jwt.verify(token, process.env.JWT_USER_PASSWORD);
 
     if(decoded){
         req.userId = decoded.userId;

@@ -14,7 +14,7 @@ userRouter.post('/signup', async function (req, res) {
         email: email,
         password: password,
         firstName: firstName,
-        lastNAme: lastName
+        lastName: lastName
     })
 
     res.json({

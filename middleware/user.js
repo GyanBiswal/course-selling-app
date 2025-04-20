@@ -1,19 +1,25 @@
-import jwt from "jsonwebtoken";
-import { JWT_USER_PASSWORD } from "../config.js";
+import jwt from 'jsonwebtoken';
 
-function userMiddleware(req, res, next){
-    const token = req.headers.token;
+function userMiddleware(req, res, next) {
+  const token = req.headers.token;
+
+  if (!token) {
+    return res.status(401).json({ message: 'Token missing' });
+  }
+
+  try {
+    // Verify the token and extract the userId from the payload
     const decoded = jwt.verify(token, process.env.JWT_USER_PASSWORD);
-
-    if(decoded){
-        req.userId = decoded.userId;
-        next();
-    }
-    else{
-        res.status(403).json({
-            message: "You are not signed in"
-        })
-    }
+    
+    // Attach the userId to the request object
+    req.userId = decoded.id;
+    
+    // Proceed to the next middleware or route handler
+    next();
+  } catch (err) {
+    // If verification fails, send a response with status 403 (Forbidden)
+    res.status(403).json({ message: 'Invalid or expired token' });
+  }
 }
 
-export {userMiddleware};
+export { userMiddleware };

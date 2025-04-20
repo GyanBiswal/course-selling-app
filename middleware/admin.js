@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import { JWT_ADMIN_PASSWORD } from "../config.js";
+// import { JWT_ADMIN_PASSWORD } from "../config.js";
 
 function adminMiddleware(req, res, next){
     const token = req.headers.token;

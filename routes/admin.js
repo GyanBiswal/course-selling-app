@@ -65,7 +65,7 @@ adminRouter.post('/course', adminMiddleware, async function (req, res) {
         });
 
         res.json({
-            message: "Course created successfully", 
+            message: "Course created successfully",
             courseId: course._id
         });
     } catch (error) {
